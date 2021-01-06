@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IField } from "store/interfaces";
+import { IField, IFieldRouteKey } from "store/interfaces";
 import createField from "store/utils/createField";
 
 const initialState: IField = createField({});
@@ -7,10 +7,18 @@ export const fieldSlice = createSlice({
   name: "field",
   initialState,
   reducers: {
-    buildRoute: (state) => {
-      console.log(state.cells[0]);
+    buildRoute: (state, { payload }) => {
+      const route = state.routes[payload];
+      const backwardRoute = state.routes[route.backward];
+      // debugger;
+      route.exists = true;
+      backwardRoute.exists = true;
     },
   },
 });
+
+export const buildRoute = (route: IFieldRouteKey) => {
+  return fieldSlice.actions.buildRoute(route);
+};
 
 export const mapFieldActions = fieldSlice.actions;
